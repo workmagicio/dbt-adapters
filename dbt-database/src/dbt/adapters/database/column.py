@@ -1,7 +1,7 @@
 from dbt.adapters.base import Column
 
 
-class PostgresColumn(Column):
+class DatabaseColumn(Column):
     @property
     def data_type(self):
         # on database, do not convert 'text' or 'varchar' to 'varchar()'

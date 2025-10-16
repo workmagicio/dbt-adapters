@@ -13,7 +13,7 @@ from dbt.adapters.relation_configs import (
 )
 
 
-class PostgresIndexMethod(StrEnum):
+class DatabaseIndexMethod(StrEnum):
     btree = "btree"
     hash = "hash"
     gist = "gist"
@@ -22,12 +22,12 @@ class PostgresIndexMethod(StrEnum):
     brin = "brin"
 
     @classmethod
-    def default(cls) -> "PostgresIndexMethod":
+    def default(cls) -> "DatabaseIndexMethod":
         return cls("btree")
 
 
 @dataclass(frozen=True, eq=True, unsafe_hash=True)
-class PostgresIndexConfig(RelationConfigBase, RelationConfigValidationMixin):
+class DatabaseIndexConfig(RelationConfigBase, RelationConfigValidationMixin):
     """
     This config fallows the specs found here:
     https://www.postgresql.org/docs/current/sql-createindex.html
@@ -46,7 +46,7 @@ class PostgresIndexConfig(RelationConfigBase, RelationConfigValidationMixin):
     name: str = field(default="", hash=False, compare=False)
     column_names: FrozenSet[str] = field(default_factory=frozenset, hash=True)
     unique: bool = field(default=False, hash=True)
-    method: PostgresIndexMethod = field(default=PostgresIndexMethod.default(), hash=True)
+    method: DatabaseIndexMethod = field(default=DatabaseIndexMethod.default(), hash=True)
 
     @property
     def validation_rules(self) -> Set[RelationConfigValidationRule]:
@@ -60,7 +60,7 @@ class PostgresIndexConfig(RelationConfigBase, RelationConfigValidationMixin):
         }
 
     @classmethod
-    def from_dict(cls, config_dict) -> "PostgresIndexConfig":
+    def from_dict(cls, config_dict) -> "DatabaseIndexConfig":
         # TODO: include the QuotePolicy instead of defaulting to lower()
         kwargs_dict = {
             "name": config_dict.get("name"),
@@ -70,7 +70,7 @@ class PostgresIndexConfig(RelationConfigBase, RelationConfigValidationMixin):
             "unique": config_dict.get("unique"),
             "method": config_dict.get("method"),
         }
-        index: "PostgresIndexConfig" = super().from_dict(kwargs_dict)  # type: ignore
+        index: "DatabaseIndexConfig" = super().from_dict(kwargs_dict)  # type: ignore
         return index
 
     @classmethod
@@ -106,7 +106,7 @@ class PostgresIndexConfig(RelationConfigBase, RelationConfigValidationMixin):
 
 
 @dataclass(frozen=True, eq=True, unsafe_hash=True)
-class PostgresIndexConfigChange(RelationConfigChange, RelationConfigValidationMixin):
+class DatabaseIndexConfigChange(RelationConfigChange, RelationConfigValidationMixin):
     """
     Example of an index change:
     {
@@ -129,7 +129,7 @@ class PostgresIndexConfigChange(RelationConfigChange, RelationConfigValidationMi
     }
     """
 
-    context: PostgresIndexConfig
+    context: DatabaseIndexConfig
 
     @property
     def requires_full_refresh(self) -> bool:

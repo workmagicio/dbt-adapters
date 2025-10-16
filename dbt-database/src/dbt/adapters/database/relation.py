@@ -11,15 +11,15 @@ from dbt_common.exceptions import DbtRuntimeError
 
 from dbt.adapters.database.relation_configs import (
     MAX_CHARACTERS_IN_IDENTIFIER,
-    PostgresIndexConfig,
-    PostgresIndexConfigChange,
-    PostgresMaterializedViewConfig,
-    PostgresMaterializedViewConfigChangeCollection,
+    DatabaseIndexConfig,
+    DatabaseIndexConfigChange,
+    DatabaseMaterializedViewConfig,
+    DatabaseMaterializedViewConfigChangeCollection,
 )
 
 
 @dataclass(frozen=True, eq=False, repr=False)
-class PostgresRelation(BaseRelation):
+class DatabaseRelation(BaseRelation):
     renameable_relations: FrozenSet[RelationType] = field(
         default_factory=lambda: frozenset(
             {
@@ -38,7 +38,7 @@ class PostgresRelation(BaseRelation):
     )
 
     def __post_init__(self):
-        # Check for length of Postgres table/view names.
+        # Check for length of Database table/view names.
         # Check self.type to exclude test relation identifiers
         if (
             self.identifier is not None
@@ -55,19 +55,19 @@ class PostgresRelation(BaseRelation):
 
     def get_materialized_view_config_change_collection(
         self, relation_results: RelationResults, relation_config: RelationConfig
-    ) -> Optional[PostgresMaterializedViewConfigChangeCollection]:
-        config_change_collection = PostgresMaterializedViewConfigChangeCollection()
+    ) -> Optional[DatabaseMaterializedViewConfigChangeCollection]:
+        config_change_collection = DatabaseMaterializedViewConfigChangeCollection()
 
-        existing_materialized_view = PostgresMaterializedViewConfig.from_relation_results(
+        existing_materialized_view = DatabaseMaterializedViewConfig.from_relation_results(
             relation_results
         )
-        new_materialized_view = PostgresMaterializedViewConfig.from_config(relation_config)
+        new_materialized_view = DatabaseMaterializedViewConfig.from_config(relation_config)
 
         config_change_collection.indexes = self._get_index_config_changes(
             existing_materialized_view.indexes, new_materialized_view.indexes
         )
 
-        # we return `None` instead of an empty `PostgresMaterializedViewConfigChangeCollection` object
+        # we return `None` instead of an empty `DatabaseMaterializedViewConfigChangeCollection` object
         # so that it's easier and more extensible to check in the materialization:
         # `core/../materializations/materialized_view.sql` :
         #     {% if configuration_changes is none %}
@@ -77,9 +77,9 @@ class PostgresRelation(BaseRelation):
 
     def _get_index_config_changes(
         self,
-        existing_indexes: FrozenSet[PostgresIndexConfig],
-        new_indexes: FrozenSet[PostgresIndexConfig],
-    ) -> List[PostgresIndexConfigChange]:
+        existing_indexes: FrozenSet[DatabaseIndexConfig],
+        new_indexes: FrozenSet[DatabaseIndexConfig],
+    ) -> List[DatabaseIndexConfigChange]:
         """
         Get the index updates that will occur as a result of a new run
 
@@ -97,13 +97,13 @@ class PostgresRelation(BaseRelation):
         Returns: an ordered list of index updates in the form {"action": "drop/create", "context": <IndexConfig>}
         """
         drop_changes = [
-            PostgresIndexConfigChange.from_dict(
+            DatabaseIndexConfigChange.from_dict(
                 {"action": RelationConfigChangeAction.drop, "context": index}
             )
             for index in existing_indexes.difference(new_indexes)
         ]
         create_changes = [
-            PostgresIndexConfigChange.from_dict(
+            DatabaseIndexConfigChange.from_dict(
                 {"action": RelationConfigChangeAction.create, "context": index}
             )
             for index in new_indexes.difference(existing_indexes)

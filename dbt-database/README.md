@@ -32,8 +32,8 @@ dbt is the T in ELT. Organize, cleanse, denormalize, filter, rename, and pre-agg
 
 ## dbt-database
 
-`dbt-database` enables dbt to work with Postgres.
-For more information on using dbt with Postgres, consult [the docs](https://docs.getdbt.com/docs/profile-database).
+`dbt-database` enables dbt to work with Database.
+For more information on using dbt with Database, consult [the docs](https://docs.getdbt.com/docs/profile-database).
 
 # Getting started
 

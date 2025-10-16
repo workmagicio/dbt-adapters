@@ -14,13 +14,13 @@ from dbt_common.exceptions import DbtRuntimeError
 
 from dbt.adapters.database.relation_configs.constants import MAX_CHARACTERS_IN_IDENTIFIER
 from dbt.adapters.database.relation_configs.index import (
-    PostgresIndexConfig,
-    PostgresIndexConfigChange,
+    DatabaseIndexConfig,
+    DatabaseIndexConfigChange,
 )
 
 
 @dataclass(frozen=True, eq=True, unsafe_hash=True)
-class PostgresMaterializedViewConfig(RelationConfigBase, RelationConfigValidationMixin):
+class DatabaseMaterializedViewConfig(RelationConfigBase, RelationConfigValidationMixin):
     """
     This config follows the specs found here:
     https://www.postgresql.org/docs/current/sql-creatematerializedview.html
@@ -38,7 +38,7 @@ class PostgresMaterializedViewConfig(RelationConfigBase, RelationConfigValidatio
 
     table_name: str = ""
     query: str = ""
-    indexes: FrozenSet[PostgresIndexConfig] = field(default_factory=frozenset)
+    indexes: FrozenSet[DatabaseIndexConfig] = field(default_factory=frozenset)
 
     @property
     def validation_rules(self) -> Set[RelationConfigValidationRule]:
@@ -60,7 +60,7 @@ class PostgresMaterializedViewConfig(RelationConfigBase, RelationConfigValidatio
             "table_name": config_dict.get("table_name"),
             "query": config_dict.get("query"),
             "indexes": frozenset(
-                PostgresIndexConfig.from_dict(index) for index in config_dict.get("indexes", {})
+                DatabaseIndexConfig.from_dict(index) for index in config_dict.get("indexes", {})
             ),
         }
         materialized_view: Self = super().from_dict(kwargs_dict)  # type: ignore
@@ -78,7 +78,7 @@ class PostgresMaterializedViewConfig(RelationConfigBase, RelationConfigValidatio
         config_dict = {
             "table_name": relation_config.identifier,
             "query": getattr(relation_config, "compiled_code", None),
-            "indexes": [PostgresIndexConfig.parse_model_node(index) for index in indexes],
+            "indexes": [DatabaseIndexConfig.parse_model_node(index) for index in indexes],
         }
         return config_dict
 
@@ -93,15 +93,15 @@ class PostgresMaterializedViewConfig(RelationConfigBase, RelationConfigValidatio
         indexes: agate.Table = relation_results.get("indexes", agate.Table(rows={}))
         config_dict = {
             "indexes": [
-                PostgresIndexConfig.parse_relation_results(index) for index in indexes.rows
+                DatabaseIndexConfig.parse_relation_results(index) for index in indexes.rows
             ],
         }
         return config_dict
 
 
 @dataclass
-class PostgresMaterializedViewConfigChangeCollection:
-    indexes: List[PostgresIndexConfigChange] = field(default_factory=list)
+class DatabaseMaterializedViewConfigChangeCollection:
+    indexes: List[DatabaseIndexConfigChange] = field(default_factory=list)
 
     @property
     def requires_full_refresh(self) -> bool:

@@ -1,4 +1,4 @@
-{#- /*Postgres doesn't support any_value, so we're using min() to get the same result*/ -#}
+{#- /*Database doesn't support any_value, so we're using min() to get the same result*/ -#}
 
 {% macro database__any_value(expression) -%}
 

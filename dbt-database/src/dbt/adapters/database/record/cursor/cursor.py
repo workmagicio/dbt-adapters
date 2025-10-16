@@ -5,7 +5,7 @@ from dbt.adapters.record import RecordReplayCursor
 from dbt.adapters.database.record.cursor.status import CursorGetStatusMessageRecord
 
 
-class PostgresRecordReplayCursor(RecordReplayCursor):
+class DatabaseRecordReplayCursor(RecordReplayCursor):
     """A custom extension of RecordReplayCursor that adds the statusmessage
     property which is specific to psycopg."""
 

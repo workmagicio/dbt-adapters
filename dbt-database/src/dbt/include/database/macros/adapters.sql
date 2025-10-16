@@ -139,7 +139,7 @@
 {% endmacro %}
 
 {#
-  Postgres tables have a maximum length of 63 characters, anything longer is silently truncated.
+  Database tables have a maximum length of 63 characters, anything longer is silently truncated.
   Temp and backup relations add a lot of extra characters to the end of table names to ensure uniqueness.
   To prevent this going over the character limit, the base_relation name is truncated to ensure
   that name + suffix + uniquestring is < 63 characters.

@@ -5,7 +5,7 @@ from typing import Optional, Union
 from dbt.adapters.contracts.connection import AdapterResponse, Credentials
 from dbt.adapters.events.logging import AdapterLogger
 from dbt.adapters.events.types import TypeCodeNotFound
-from dbt.adapters.database.record import PostgresRecordReplayHandle
+from dbt.adapters.database.record import DatabaseRecordReplayHandle
 from dbt.adapters.sql import SQLConnectionManager
 from dbt_common.exceptions import DbtDatabaseError, DbtRuntimeError
 from dbt_common.events.functions import warn_or_error
@@ -16,11 +16,11 @@ import psycopg2
 from typing_extensions import Annotated
 
 
-logger = AdapterLogger("Postgres")
+logger = AdapterLogger("Database")
 
 
 @dataclass
-class PostgresCredentials(Credentials):
+class DatabaseCredentials(Credentials):
     host: str
     user: str
     # Annotated is used by mashumaro for jsonschema generation
@@ -67,7 +67,7 @@ class PostgresCredentials(Credentials):
         )
 
 
-class PostgresConnectionManager(SQLConnectionManager):
+class DatabaseConnectionManager(SQLConnectionManager):
     TYPE = "database"
 
     @contextmanager
@@ -76,7 +76,7 @@ class PostgresConnectionManager(SQLConnectionManager):
             yield
 
         except psycopg2.DatabaseError as e:
-            logger.debug("Postgres error: {}".format(str(e)))
+            logger.debug("Database error: {}".format(str(e)))
 
             try:
                 self.rollback_if_open()
@@ -154,7 +154,7 @@ class PostgresConnectionManager(SQLConnectionManager):
             if rec_mode is not None:
                 # If using the record/replay mechanism, regardless of mode, we
                 # use a wrapper.
-                handle = PostgresRecordReplayHandle(handle, connection)
+                handle = DatabaseRecordReplayHandle(handle, connection)
 
             if credentials.role:
                 handle.cursor().execute("set role {}".format(credentials.role))

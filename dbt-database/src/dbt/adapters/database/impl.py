@@ -21,16 +21,16 @@ from dbt_common.dataclass_schema import ValidationError, dbtClassMixin
 from dbt_common.exceptions import DbtRuntimeError
 from dbt_common.utils import encoding as dbt_encoding
 
-from dbt.adapters.database.column import PostgresColumn
-from dbt.adapters.database.connections import PostgresConnectionManager
-from dbt.adapters.database.relation import PostgresRelation
+from dbt.adapters.database.column import DatabaseColumn
+from dbt.adapters.database.connections import DatabaseConnectionManager
+from dbt.adapters.database.relation import DatabaseRelation
 
 
 GET_RELATIONS_MACRO_NAME = "database__get_relations"
 
 
 @dataclass
-class PostgresIndexConfig(dbtClassMixin):
+class DatabaseIndexConfig(dbtClassMixin):
     columns: List[str]
     unique: bool = False
     type: Optional[str] = None
@@ -46,7 +46,7 @@ class PostgresIndexConfig(dbtClassMixin):
         return dbt_encoding.md5(string)
 
     @classmethod
-    def parse(cls, raw_index) -> Optional["PostgresIndexConfig"]:
+    def parse(cls, raw_index) -> Optional["DatabaseIndexConfig"]:
         if raw_index is None:
             return None
         try:
@@ -59,17 +59,17 @@ class PostgresIndexConfig(dbtClassMixin):
 
 
 @dataclass
-class PostgresConfig(AdapterConfig):
+class DatabaseConfig(AdapterConfig):
     unlogged: Optional[bool] = None
-    indexes: Optional[List[PostgresIndexConfig]] = None
+    indexes: Optional[List[DatabaseIndexConfig]] = None
 
 
-class PostgresAdapter(SQLAdapter):
-    Relation = PostgresRelation
-    ConnectionManager = PostgresConnectionManager
-    Column = PostgresColumn
+class DatabaseAdapter(SQLAdapter):
+    Relation = DatabaseRelation
+    ConnectionManager = DatabaseConnectionManager
+    Column = DatabaseColumn
 
-    AdapterSpecificConfigs = PostgresConfig
+    AdapterSpecificConfigs = DatabaseConfig
 
     CONSTRAINT_SUPPORT = {
         ConstraintType.check: ConstraintSupport.ENFORCED,
@@ -100,8 +100,8 @@ class PostgresAdapter(SQLAdapter):
         return ""
 
     @available
-    def parse_index(self, raw_index: Any) -> Optional[PostgresIndexConfig]:
-        return PostgresIndexConfig.parse(raw_index)
+    def parse_index(self, raw_index: Any) -> Optional[DatabaseIndexConfig]:
+        return DatabaseIndexConfig.parse(raw_index)
 
     def _link_cached_database_relations(self, schemas: Set[str]):
         """
