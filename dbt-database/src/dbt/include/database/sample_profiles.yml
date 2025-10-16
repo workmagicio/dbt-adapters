@@ -1,24 +1,11 @@
+
 default:
+  target: database
   outputs:
-
-    dev:
+    database:
       type: database
-      threads: [1 or more]
-      host: [host]
-      port: [port]
-      user: [dev_username]
-      pass: [dev_password]
-      dbname: [dbname]
-      schema: [dev_schema]
-
-    prod:
-      type: database
-      threads: [1 or more]
-      host: [host]
-      port: [port]
-      user: [prod_username]
-      pass: [prod_password]
-      dbname: [dbname]
-      schema: [prod_schema]
-
-  target: dev
+      host: <host>
+      port: <port>
+      base: <base>
+      user: <user>
+      pass: <pass>

@@ -26,9 +26,9 @@ dependencies = [
     "dbt-core>=1.0",
     "dbt-common>=1.0,<2.0",
     "dbt-adapters>=1.0,<2.0",
-    "agate>=1.0,<2.0",
     "mysql-connector-python>=8.0",
 ]
+
 [project.urls]
 Homepage = "https://github.com/dbt-labs/dbt-adapters/tree/main/dbt-database"
 Documentation = "https://docs.getdbt.com"
