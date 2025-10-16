@@ -1,4 +1,4 @@
-{% macro postgres__get_relations() -%}
+{% macro database__get_relations() -%}
 
   {#
       -- in pg_depend, objid is the dependent, refobjid is the referenced object
@@ -46,6 +46,6 @@
   {{ return(load_result('relations').table) }}
 {% endmacro %}
 
-{% macro postgres_get_relations() %}
-  {{ return(postgres__get_relations()) }}
+{% macro database_get_relations() %}
+  {{ return(database__get_relations()) }}
 {% endmacro %}

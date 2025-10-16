@@ -21,12 +21,12 @@ from dbt_common.dataclass_schema import ValidationError, dbtClassMixin
 from dbt_common.exceptions import DbtRuntimeError
 from dbt_common.utils import encoding as dbt_encoding
 
-from dbt.adapters.postgres.column import PostgresColumn
-from dbt.adapters.postgres.connections import PostgresConnectionManager
-from dbt.adapters.postgres.relation import PostgresRelation
+from dbt.adapters.database.column import PostgresColumn
+from dbt.adapters.database.connections import PostgresConnectionManager
+from dbt.adapters.database.relation import PostgresRelation
 
 
-GET_RELATIONS_MACRO_NAME = "postgres__get_relations"
+GET_RELATIONS_MACRO_NAME = "database__get_relations"
 
 
 @dataclass
@@ -124,7 +124,7 @@ class PostgresAdapter(SQLAdapter):
                 self.cache.add_link(referenced, dependent)
 
     def _get_catalog_schemas(self, manifest):
-        # postgres only allow one database (the main one)
+        # database only allow one database (the main one)
         schema_search_map = super()._get_catalog_schemas(manifest)
         try:
             return schema_search_map.flatten()

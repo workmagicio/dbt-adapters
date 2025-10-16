@@ -1,14 +1,14 @@
 from dbt.adapters.base import AdapterPlugin
 
-from dbt.adapters.postgres.column import PostgresColumn
-from dbt.adapters.postgres.connections import PostgresConnectionManager, PostgresCredentials
-from dbt.adapters.postgres.impl import PostgresAdapter
-from dbt.adapters.postgres.relation import PostgresRelation
-from dbt.include import postgres
+from dbt.adapters.database.column import PostgresColumn
+from dbt.adapters.database.connections import PostgresConnectionManager, PostgresCredentials
+from dbt.adapters.database.impl import PostgresAdapter
+from dbt.adapters.database.relation import PostgresRelation
+from dbt.include import database
 
 
 Plugin = AdapterPlugin(
     adapter=PostgresAdapter,  # type: ignore
     credentials=PostgresCredentials,
-    include_path=postgres.PACKAGE_PATH,
+    include_path=database.PACKAGE_PATH,
 )

@@ -1,2 +1,2 @@
-from dbt.adapters.postgres.record.cursor.cursor import PostgresRecordReplayCursor
-from dbt.adapters.postgres.record.handle import PostgresRecordReplayHandle
+from dbt.adapters.database.record.cursor.cursor import PostgresRecordReplayCursor
+from dbt.adapters.database.record.handle import PostgresRecordReplayHandle

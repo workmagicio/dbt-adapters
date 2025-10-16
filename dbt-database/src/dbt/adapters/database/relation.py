@@ -9,7 +9,7 @@ from dbt.adapters.relation_configs import (
 )
 from dbt_common.exceptions import DbtRuntimeError
 
-from dbt.adapters.postgres.relation_configs import (
+from dbt.adapters.database.relation_configs import (
     MAX_CHARACTERS_IN_IDENTIFIER,
     PostgresIndexConfig,
     PostgresIndexConfigChange,

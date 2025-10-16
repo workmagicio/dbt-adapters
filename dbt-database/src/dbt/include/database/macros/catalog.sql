@@ -1,5 +1,5 @@
 
-{% macro postgres__get_catalog_relations(information_schema, relations) -%}
+{% macro database__get_catalog_relations(information_schema, relations) -%}
   {%- call statement('catalog', fetch_result=True) -%}
 
     {#
@@ -58,10 +58,10 @@
 {%- endmacro %}
 
 
-{% macro postgres__get_catalog(information_schema, schemas) -%}
+{% macro database__get_catalog(information_schema, schemas) -%}
   {%- set relations = [] -%}
   {%- for schema in schemas -%}
     {%- set dummy = relations.append({'schema': schema}) -%}
   {%- endfor -%}
-  {{ return(postgres__get_catalog_relations(information_schema, relations)) }}
+  {{ return(database__get_catalog_relations(information_schema, relations)) }}
 {%- endmacro %}

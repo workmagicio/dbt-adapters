@@ -5,7 +5,7 @@ from typing import Optional, Union
 from dbt.adapters.contracts.connection import AdapterResponse, Credentials
 from dbt.adapters.events.logging import AdapterLogger
 from dbt.adapters.events.types import TypeCodeNotFound
-from dbt.adapters.postgres.record import PostgresRecordReplayHandle
+from dbt.adapters.database.record import PostgresRecordReplayHandle
 from dbt.adapters.sql import SQLConnectionManager
 from dbt_common.exceptions import DbtDatabaseError, DbtRuntimeError
 from dbt_common.events.functions import warn_or_error
@@ -25,7 +25,7 @@ class PostgresCredentials(Credentials):
     user: str
     # Annotated is used by mashumaro for jsonschema generation
     port: Annotated[Port, Minimum(0), Maximum(65535)]
-    password: str  # on postgres the password is mandatory
+    password: str  # on database the password is mandatory
     connect_timeout: int = 10
     role: Optional[str] = None
     search_path: Optional[str] = None
@@ -41,7 +41,7 @@ class PostgresCredentials(Credentials):
 
     @property
     def type(self):
-        return "postgres"
+        return "database"
 
     @property
     def unique_field(self):
@@ -68,7 +68,7 @@ class PostgresCredentials(Credentials):
 
 
 class PostgresConnectionManager(SQLConnectionManager):
-    TYPE = "postgres"
+    TYPE = "database"
 
     @contextmanager
     def exception_handler(self, sql):
@@ -106,7 +106,7 @@ class PostgresConnectionManager(SQLConnectionManager):
 
         credentials = cls.get_credentials(connection.credentials)
         kwargs = {}
-        # we don't want to pass 0 along to connect() as postgres will try to
+        # we don't want to pass 0 along to connect() as database will try to
         # call an invalid setsockopt() call (contrary to the docs).
         if credentials.keepalives_idle:
             kwargs["keepalives_idle"] = credentials.keepalives_idle
