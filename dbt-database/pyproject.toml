@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 dynamic = ["version"]
-name = "dbt-postgres"
+name = "dbt-database"
 description = "The set of adapter protocols and base functionality that supports integration with dbt-core"
 readme = "README.md"
-keywords = ["dbt", "adapter", "adapters", "database", "elt", "dbt-core", "dbt Core", "dbt Cloud", "dbt Labs", "postgres"]
+keywords = ["dbt", "adapter", "adapters", "database", "elt", "dbt-core", "dbt Core", "dbt Cloud", "dbt Labs", "database"]
 requires-python = ">=3.9.0"
 authors = [
     { name = "dbt Labs", email = "info@dbtlabs.com" },
@@ -36,11 +36,11 @@ dependencies = [
     "agate>=1.0,<2.0",
 ]
 [project.urls]
-Homepage = "https://github.com/dbt-labs/dbt-adapters/tree/main/dbt-postgres"
+Homepage = "https://github.com/dbt-labs/dbt-adapters/tree/main/dbt-database"
 Documentation = "https://docs.getdbt.com"
-Repository = "https://github.com/dbt-labs/dbt-adapters.git#subdirectory=dbt-postgres"
+Repository = "https://github.com/dbt-labs/dbt-adapters.git#subdirectory=dbt-database"
 Issues = "https://github.com/dbt-labs/dbt-adapters/issues"
-Changelog = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-postgres/CHANGELOG.md"
+Changelog = "https://github.com/dbt-labs/dbt-adapters/blob/main/dbt-database/CHANGELOG.md"
 
 [tool.pytest.ini_options]
 testpaths = ["tests/unit", "tests/functional"]
