@@ -101,16 +101,11 @@ class DatabaseConnectionManager(SQLConnectionManager):
     @classmethod
     def get_response(cls, cursor) -> AdapterResponse:
         code = "SUCCESS"
-        num_rows = 0
-
+        rows = 0
         if cursor is not None and cursor.rowcount is not None:
-            num_rows = cursor.rowcount
-
-        # There's no real way to get the status from the
-        # mysql-connector-python driver.
-        # So just return the default value.
+            rows = cursor.rowcount
         return AdapterResponse(
-            _message="{} {}".format(code, num_rows), rows_affected=num_rows, code=code
+            _message="{} {}".format(code, rows), rows_affected=rows, code=code
         )
 
     @classmethod
