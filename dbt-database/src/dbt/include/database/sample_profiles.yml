@@ -4,8 +4,8 @@ default:
   outputs:
     database:
       type: database
+      base: <base>
       host: <host>
       port: <port>
-      base: <base>
       user: <user>
       pass: <pass>

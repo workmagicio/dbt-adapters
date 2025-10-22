@@ -1,12 +1,12 @@
 fixed:
   type: database
 prompts:
+  base:
+    hint: 'database'
   host:
     hint: 'hostname'
   port:
     type: 'int'
-  base:
-    hint: 'database'
   user:
     hint: 'username'
   pass:
