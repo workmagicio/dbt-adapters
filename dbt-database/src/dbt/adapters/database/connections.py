@@ -1,5 +1,5 @@
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from dbt.adapters.sql import SQLConnectionManager
 from dbt_common.exceptions import DbtDatabaseError, DbtRuntimeError
 from dbt.adapters.exceptions import FailedToConnectError
@@ -19,6 +19,8 @@ class DatabaseCredentials(Credentials):
     base: str
     user: str
     word: str
+    schema: str = field(init=False, repr=False, default="")
+    database: str = field(init=False, repr=False, default="")
 
     _ALIASES = {"pass": "word"}
 

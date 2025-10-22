@@ -18,6 +18,6 @@ class DatabaseIncludePolicy(Policy):
 
 @dataclass(frozen=True, eq=False, repr=False)
 class DatabaseRelation(BaseRelation):
-    quote_policy = field(default_factory=lambda: DatabaseQuotePolicy())
-    include_policy = field(default_factory=lambda: DatabaseIncludePolicy())
+    quote_policy: DatabaseQuotePolicy = field(default_factory=DatabaseQuotePolicy)
+    include_policy: DatabaseIncludePolicy = field(default_factory=DatabaseIncludePolicy)
     quote_character: str = "`"
