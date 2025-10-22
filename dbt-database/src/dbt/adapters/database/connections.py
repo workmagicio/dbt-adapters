@@ -1,3 +1,4 @@
+from typing import Optional
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from dbt.adapters.sql import SQLConnectionManager
@@ -14,15 +15,14 @@ logger = AdapterLogger("Database")
 
 @dataclass
 class DatabaseCredentials(Credentials):
-    host: str
-    port: int
-    base: str
-    user: str
-    word: str
-    schema: str = field(init=False, repr=False, default="")
-    database: str = field(init=False, repr=False, default="")
+    database: Optional[str] = None
+    schema: Optional[str] = None
+    host: Optional[str] = None
+    port: Optional[int] = None
+    user: Optional[str] = None
+    word: Optional[str] = None
 
-    _ALIASES = {"pass": "word"}
+    _ALIASES = {"base": "schema", "pass": "word"}
 
     @property
     def type(self):
@@ -30,13 +30,13 @@ class DatabaseCredentials(Credentials):
 
     @property
     def unique_field(self):
-        return f"{self.host}/{self.port}/{self.base}"
+        return f"{self.schema}/{self.host}/{self.port}"
 
     def _connection_keys(self):
         return (
+            "schema",
             "host",
             "port",
-            "base",
             "user",
             "word",
         )
@@ -54,13 +54,12 @@ class DatabaseConnectionManager(SQLConnectionManager):
         kwargs = {}
         kwargs["host"] = credentials.host
         kwargs["port"] = credentials.port
-        kwargs["database"] = credentials.base
         kwargs["username"] = credentials.user
         kwargs["password"] = credentials.word
         try:
             connection.handle = mysql.connector.connect(**kwargs)
             connection.state = "open"
-        except mysql.connector.Error:
+        except mysql.connector.Error as e:
             try:
                 logger.debug(
                     "Failed connection without supplying the `database`. "
