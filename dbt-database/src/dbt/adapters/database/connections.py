@@ -22,7 +22,13 @@ class DatabaseCredentials(Credentials):
     user: Optional[str] = None
     word: Optional[str] = None
 
-    _ALIASES = {"base": "schema", "pass": "word"}
+    _ALIASES = {
+        "username": "user",
+        "password": "word",
+        "server": "host",
+        "base": "schema",
+        "pass": "word",
+    }
 
     @property
     def type(self):
