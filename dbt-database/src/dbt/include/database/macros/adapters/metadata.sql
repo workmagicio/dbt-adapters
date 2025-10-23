@@ -2,7 +2,7 @@
 {% macro database__list_relations_without_caching(schema_relation) %}
   {% call statement('list_relations_without_caching', fetch_result=True) %}
     select
-      null,
+      '',
       table_name,
       table_schema,
       case

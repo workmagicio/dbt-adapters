@@ -67,10 +67,6 @@ class DatabaseConnectionManager(SQLConnectionManager):
             connection.state = "open"
         except mysql.connector.Error as e:
             try:
-                logger.debug(
-                    "Failed connection without supplying the `database`. "
-                    "Trying again with `database` included."
-                )
                 connection.handle = mysql.connector.connect(**kwargs)
                 connection.state = "open"
             except mysql.connector.Error as e:
