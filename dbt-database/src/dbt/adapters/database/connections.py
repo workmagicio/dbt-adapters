@@ -62,6 +62,7 @@ class DatabaseConnectionManager(SQLConnectionManager):
         kwargs["port"] = credentials.port
         kwargs["username"] = credentials.user
         kwargs["password"] = credentials.word
+        kwargs["database"] = credentials.schema
         try:
             connection.handle = mysql.connector.connect(**kwargs)
             connection.state = "open"
